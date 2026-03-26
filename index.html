@@ -1,1 +1,106 @@
+import React, { useState } from "react";
+import { Card, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 
+export default function SchoolStore() {
+  const [pages, setPages] = useState(1);
+  const [price, setPrice] = useState(3);
+  const [extras, setExtras] = useState(0);
+
+  const calculatePrice = (p, e = extras) => {
+    const costPerPage = 3;
+    setPages(p);
+    setPrice(p * costPerPage + e);
+  };
+
+  const handleExtras = (value) => {
+    setExtras(value);
+    calculatePrice(pages, value);
+  };
+
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 text-white">
+      <div className="max-w-6xl mx-auto p-6 space-y-10">
+
+        {/* Header */}
+        <div className="text-center space-y-2">
+          <h1 className="text-5xl font-extrabold tracking-tight">Campus QuickStore</h1>
+          <p className="text-gray-300 text-lg">Fast prints. School supplies. Next-day delivery.</p>
+        </div>
+
+        {/* Print Service */}
+        <Card className="bg-white/10 backdrop-blur-xl border border-white/20 rounded-3xl shadow-2xl">
+          <CardContent className="p-8 space-y-5">
+            <h2 className="text-2xl font-semibold">📄 Print Service</h2>
+
+            <input
+              type="text"
+              placeholder="Your Name"
+              className="w-full p-3 rounded-xl bg-white/10 border border-white/20 placeholder-gray-300"
+            />
+
+            <input
+              type="file"
+              className="w-full p-3 rounded-xl bg-white/10 border border-white/20"
+            />
+
+            <input
+              type="number"
+              value={pages}
+              min={1}
+              onChange={(e) => calculatePrice(Number(e.target.value))}
+              className="w-full p-3 rounded-xl bg-white/10 border border-white/20"
+            />
+
+            <select
+              onChange={(e) => handleExtras(Number(e.target.value))}
+              className="w-full p-3 rounded-xl bg-white/10 border border-white/20"
+            >
+              <option value={0}>No Extras</option>
+              <option value={10}>Cover Page (+₹10)</option>
+              <option value={20}>Formatting (+₹20)</option>
+            </select>
+
+            <div className="text-xl font-semibold">Total: ₹{price}</div>
+
+            <Button className="w-full bg-purple-600 hover:bg-purple-700 rounded-xl text-lg">
+              Place Print Order
+            </Button>
+          </CardContent>
+        </Card>
+
+        {/* Store */}
+        <div className="space-y-4">
+          <h2 className="text-2xl font-semibold">🛒 School Supplies</h2>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+
+            {[
+              { name: "Glue Stick", price: 20, desc: "Strong & reliable" },
+              { name: "Blue Pen", price: 10, desc: "Smooth writing" },
+              { name: "Notebook", price: 60, desc: "200 pages" }
+            ].map((item, i) => (
+              <Card key={i} className="bg-white/10 backdrop-blur-xl border border-white/20 rounded-3xl hover:scale-105 transition">
+                <CardContent className="p-6 space-y-3">
+                  <h3 className="text-xl font-semibold">{item.name}</h3>
+                  <p className="text-gray-300">{item.desc}</p>
+                  <div className="text-lg font-bold">₹{item.price}</div>
+                  <Button className="w-full bg-white text-black hover:bg-gray-200 rounded-xl">
+                    Order Now
+                  </Button>
+                </CardContent>
+              </Card>
+            ))}
+
+          </div>
+        </div>
+
+        {/* Footer */}
+        <div className="text-center text-gray-400 text-sm pt-10">
+          Built for students • Delivering inside school • Simple & fast
+        </div>
+
+      </div>
+    </div>
+  );
+}
